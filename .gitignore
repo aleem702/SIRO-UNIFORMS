@@ -1,0 +1,30 @@
+# Root gitignore
+node_modules/
+venv/
+.env
+db.sqlite3
+__pycache__/
+*.pyc
+
+# Frontend assets
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+
+# Large Binaries
+# siro_tshirt.glb # Assuming we want to keep it in the repo for now per "all files" request
