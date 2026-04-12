@@ -145,6 +145,7 @@ export default function LandingPage() {
             onLoadedData={(e) => e.target.classList.add('loaded')}
             style={{ opacity: 1 }} // Force visibility
           >
+            <source src="/hero-video.webm" type="video/webm" />
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
           
