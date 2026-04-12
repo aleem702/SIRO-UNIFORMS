@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import LandingPage from '../components/LandingPage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout title="SIRO Uniforms | Professional Uniforms Redefined">
+	<Navbar client:load pathname={pathname} />
+	<main>
+		<LandingPage client:load />
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+	}
+</style>

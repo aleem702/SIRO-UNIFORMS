@@ -1,10 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Box, Menu, X } from 'lucide-react';
+import { Package, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-export default function Navbar() {
-  const location = useLocation();
+export default function Navbar({ pathname }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -16,27 +14,29 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isLanding = location.pathname === '/';
+  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const isLanding = pathname === '/';
+  const isCollectionPage = pathname === '/collection';
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Collection', path: '/collection' },
     { name: 'Lookbook', path: '/magazine' },
-    { name: 'About', path: '#about' },
-    { name: 'Process', path: '#process' },
-    { name: 'Contact', path: '#contact' },
+    { name: 'About', path: '/#about' },
+    { name: 'Process', path: '/#process' },
+    { name: 'Contact', path: '/#contact' },
   ];
 
   return (
     <>
       <motion.nav
-        initial={{ y: -100 }}
         animate={{ 
-          y: 0,
-          backgroundColor: isScrolled || !isLanding || isMenuOpen ? 'var(--surface-2)' : 'rgba(255, 255, 255, 0)',
-          backdropFilter: isScrolled || !isLanding || isMenuOpen ? 'blur(16px)' : 'blur(0px)',
+          y: isNavbarHidden ? -75 : 0,
+          backgroundColor: isScrolled || !isLanding || isMenuOpen ? 'var(--surface)' : 'rgba(255, 255, 255, 0)',
+          backdropFilter: isScrolled || !isLanding || isMenuOpen ? 'blur(20px)' : 'blur(0px)',
           borderBottom: isScrolled || !isLanding || isMenuOpen ? '1px solid var(--border)' : '1px solid rgba(255,255,255,0)',
         }}
-        transition={{ duration: 0.5 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         style={{
           position: isLanding && !isScrolled ? 'absolute' : 'fixed',
           width: '100%',
@@ -50,26 +50,53 @@ export default function Navbar() {
           height: isScrolled ? '65px' : '75px',
         }}
       >
-        <Link to="/" className="nav-logo" onClick={() => setIsMenuOpen(false)}>
-          <img src="/logo.png" alt="SIRO Uniforms" style={{ height: '42px' }} />
-        </Link>
+        <a href="/" className="nav-logo" onClick={() => setIsMenuOpen(false)}>
+          <img src="/logo.png" alt="SIRO Uniforms" style={{ height: '48px' }} />
+        </a>
+
+        {/* Center Toggle Arrow for Collection Page */}
+        {isCollectionPage && (
+          <motion.button
+            onClick={() => setIsNavbarHidden(!isNavbarHidden)}
+            whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
+            animate={{
+              bottom: isNavbarHidden ? -32 : 10,
+              rotate: isNavbarHidden ? 180 : 0
+            }}
+            style={{
+              position: 'absolute',
+              left: '50%',
+              x: '-50%',
+              background: isNavbarHidden ? 'var(--surface)' : 'transparent',
+              border: isNavbarHidden ? '1px solid var(--border)' : 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: 'var(--brand)',
+              zIndex: 1001,
+              boxShadow: isNavbarHidden ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
+            <ChevronDown size={18} />
+          </motion.button>
+        )}
 
         {/* Desktop Links */}
         <div className="nav-links">
           {navLinks.map((link) => (
-            link.path.startsWith('#') ? (
-              <a key={link.name} href={link.path} style={{ color: (isScrolled || !isLanding) ? 'var(--text-muted)' : 'rgba(255,255,255,0.9)' }}>
-                {link.name}
-              </a>
-            ) : (
-              <Link key={link.name} to={link.path} className={location.pathname === link.path ? 'active' : ''} style={{ color: (isScrolled || !isLanding) ? 'var(--text-muted)' : 'rgba(255,255,255,0.9)' }}>
-                {link.name}
-              </Link>
-            )
+             <a 
+               key={link.name} 
+               href={link.path} 
+               className={pathname === link.path ? 'active' : ''}
+               style={{ color: (isScrolled || !isLanding) ? 'var(--text-muted)' : 'var(--brand)' }}
+             >
+               {link.name}
+             </a>
           ))}
-          <Link to="/explore" className="btn btn-primary" style={{padding: '8px 16px', fontSize: '0.85rem'}}>
-            <Box size={16} /> Catalogue
-          </Link>
         </div>
         
         {/* Mobile Menu Toggle Button */}
@@ -82,7 +109,7 @@ export default function Navbar() {
             border: 'none',
             padding: '10px',
             borderRadius: '12px',
-            color: (isScrolled || !isLanding || isMenuOpen) ? 'var(--brand)' : '#fff',
+            color: (isScrolled || !isLanding || isMenuOpen) ? 'var(--brand)' : 'var(--brand)',
             cursor: 'pointer',
             zIndex: 1001,
           }}
@@ -106,8 +133,8 @@ export default function Navbar() {
               right: '16px',
               width: 'calc(100% - 32px)',
               maxWidth: '260px',
-              backgroundColor: 'rgba(255, 255, 255, 0.88)',
-              backdropFilter: 'blur(24px)',
+              backgroundColor: 'var(--glass)',
+              backdropFilter: 'blur(32px)',
               WebkitBackdropFilter: 'blur(24px)',
               borderRadius: '24px',
               padding: '20px',
@@ -126,21 +153,15 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-                {link.path.startsWith('#') ? (
-                  <a href={link.path} onClick={() => setIsMenuOpen(false)} style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--brand)', display: 'block', padding: '10px 12px', borderRadius: '12px', transition: 'background 0.2s' }}>
-                    {link.name}
-                  </a>
-                ) : (
-                  <Link to={link.path} onClick={() => setIsMenuOpen(false)} style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--brand)', display: 'block', padding: '10px 12px', borderRadius: '12px', transition: 'background 0.2s' }}>
-                    {link.name}
-                  </Link>
-                )}
+                <a href={link.path} onClick={() => setIsMenuOpen(false)} style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--brand)', display: 'block', padding: '10px 12px', borderRadius: '12px', transition: 'background 0.2s', textDecoration: 'none' }}>
+                  {link.name}
+                </a>
               </motion.div>
             ))}
             <div style={{ height: '1px', background: 'rgba(0,0,0,0.06)', margin: '8px 4px' }} />
-            <Link to="/explore" onClick={() => setIsMenuOpen(false)} className="btn btn-primary" style={{padding: '12px', fontSize: '0.85rem', width: '100%', justifyContent: 'center', borderRadius: '14px'}}>
-              <Box size={16} /> Catalogue
-            </Link>
+            <a href="/collection" onClick={() => setIsMenuOpen(false)} className="btn btn-primary" style={{padding: '12px', fontSize: '0.85rem', width: '100%', justifyContent: 'center', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none'}}>
+              <Package size={16} /> Catalogue
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

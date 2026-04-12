@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import CollectionsPage from '../components/CollectionsPage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout title="Design Collection | SIRO Studio Gallery">
+	<Navbar client:load pathname={pathname} />
+	<main>
+		<CollectionsPage client:load />
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+		overflow-x: hidden;
+		background: var(--background);
+	}
+</style>

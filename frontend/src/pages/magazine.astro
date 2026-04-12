@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import MagazinePage from '../components/MagazinePage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout title="SIRO Lookbook | Signature Collections">
+	<Navbar client:load pathname={pathname} />
+	<main>
+		<MagazinePage client:load />
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+		overflow-x: hidden;
+	}
+</style>
