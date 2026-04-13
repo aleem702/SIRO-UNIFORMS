@@ -33,7 +33,7 @@ export default function Navbar({ pathname }) {
         animate={{ 
           y: isNavbarHidden ? -75 : 0,
           backgroundColor: isScrolled || !isLanding || isMenuOpen ? 'var(--surface)' : 'rgba(255, 255, 255, 0)',
-          backdropFilter: isScrolled || !isLanding || isMenuOpen ? 'blur(20px)' : 'blur(0px)',
+          backdropFilter: isScrolled || !isLanding || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
           borderBottom: isScrolled || !isLanding || isMenuOpen ? '1px solid var(--border)' : '1px solid rgba(255,255,255,0)',
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
@@ -134,8 +134,8 @@ export default function Navbar({ pathname }) {
               width: 'calc(100% - 32px)',
               maxWidth: '260px',
               backgroundColor: 'var(--glass)',
-              backdropFilter: 'blur(32px)',
-              WebkitBackdropFilter: 'blur(24px)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
               borderRadius: '24px',
               padding: '20px',
               zIndex: 1100,

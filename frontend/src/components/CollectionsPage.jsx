@@ -72,24 +72,42 @@ const ImageSequenceViewer = ({ basePath, frameCount, isActive }) => {
     let loadedCount = 0;
     const frames = [];
     
-    const loadFrame = (index) => {
+    const loadFrame = (index, isPriority = false) => {
       if (frames[index]) return;
-      const img = new Image();
-      const frameNum = index.toString().padStart(6, '0');
-      img.src = `${basePath}frame_${frameNum}.webp`;
-      img.onload = () => {
-        loadedCount++;
-        setLoadProgress(Math.round((loadedCount / frameCount) * 100));
-        if (loadedCount === frameCount) {
-          setIsLoading(false);
-        }
-      };
-      frames[index] = img;
+      
+      return new Promise((resolve) => {
+        const img = new Image();
+        const frameNum = index.toString().padStart(6, '0');
+        img.src = `${basePath}frame_${frameNum}.webp`;
+        img.onload = () => {
+          loadedCount++;
+          // Throttle progress updates: Only update every 10 frames to reduce React overhead
+          if (loadedCount % 10 === 0 || loadedCount === frameCount) {
+            setLoadProgress(Math.round((loadedCount / frameCount) * 100));
+          }
+          
+          if (loadedCount === frameCount) {
+            setIsLoading(false);
+          }
+          frames[index] = img;
+          resolve();
+        };
+      });
     };
 
-    for (let i = 1; i <= frameCount; i++) {
-      loadFrame(i);
-    }
+    // PHASED LOADING:
+    const loadAll = async () => {
+      // 1. Load critical frames (first 10) immediately for baseline stability
+      const criticalFrames = [1, 5, 10, 20, 30];
+      await Promise.all(criticalFrames.map(f => loadFrame(f, true)));
+      
+      // 2. Load the rest of the archive in the background
+      for (let i = 1; i <= frameCount; i++) {
+        loadFrame(i);
+      }
+    };
+
+    loadAll();
     sequenceRef.current = frames;
   }, [basePath, frameCount, isActive]);
 
@@ -191,12 +209,15 @@ const ImageSequenceViewer = ({ basePath, frameCount, isActive }) => {
         <img
           src={currentSrc}
           alt="Product Sequence"
+          loading="eager" // Performance priority
           style={{
             maxHeight: '100%',
             maxWidth: '100%',
             objectFit: 'contain',
             pointerEvents: 'none',
-            filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.15))'
+            filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.15))',
+            opacity: isLoading ? 0 : 1, // Hide until logic is ready to prevent frame-jump
+            transition: 'opacity 0.4s ease'
           }}
         />
       </motion.div>
@@ -236,31 +257,32 @@ const PillDropdown = ({ label, value, options, onChange, icon: Icon }) => {
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <motion.button
-        whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.15)' }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.01, backgroundColor: 'rgba(255,255,255,0.2)' }}
+        whileTap={{ scale: 0.99 }}
         onClick={() => setIsOpen(!isOpen)}
         style={{
           width: '100%',
           padding: '12px 20px',
-          borderRadius: '100px',
+          borderRadius: '16px',
           background: 'rgba(255,255,255,0.1)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.2)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.15)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           cursor: 'pointer',
           color: '#1a1a1a',
-          gap: '12px'
+          gap: '12px',
+          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {Icon && <Icon size={14} style={{ opacity: 0.6 }} />}
-          <span style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px', opacity: 0.5 }}>{label}</span>
+          <span style={{ fontSize: '0.6rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '2px', color: '#888' }}>{label}</span>
           <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>{value}</span>
         </div>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
-          <ChevronRight size={16} strokeWidth={3} />
+        <motion.div animate={{ rotate: isOpen ? 90 : 0 }}>
+          <ChevronRight size={16} strokeWidth={2.5} style={{ opacity: 0.5 }} />
         </motion.div>
       </motion.button>
 
@@ -361,29 +383,33 @@ const CollectionsPage = () => {
 
 
   return (
-    <div style={{
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: '#f6f6f6',
-      backgroundImage: `
-        radial-gradient(circle at 50% 50%, #ffffff 0%, #f6f6f6 100%),
-        url('https://www.transparenttextures.com/patterns/concrete-wall.png')
-      `,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start', // Align to left so stage starts at 0
-      justifyContent: 'center', 
-      overflow: 'hidden',
-
-      color: '#1a1a1a',
-      fontFamily: "'Outfit', sans-serif"
-    }}>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, ease: 'easeOut' }}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#f6f6f6',
+        backgroundImage: `
+          radial-gradient(circle at 50% 50%, #ffffff 0%, #eeeeee 100%),
+          url('https://www.transparenttextures.com/patterns/concrete-wall.png')
+        `,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start', // Align to left so stage starts at 0
+        justifyContent: 'center', 
+        overflow: 'hidden',
+        color: '#1a1a1a',
+        fontFamily: "'Outfit', sans-serif"
+      }}
+    >
       
       {/* 3D CAROUSEL STAGE - Now focused solo view */}
       <div 
         ref={containerRef}
         style={{
-          width: 'calc(100% - 360px)', // Accounting for 320px sidebar + 40px margin
+          width: 'calc(100% - 480px)', // Accounting for 400px sidebar + 80px margin
           flex: 1,
           position: 'relative',
           perspective: '1500px',
@@ -459,7 +485,7 @@ const CollectionsPage = () => {
         position: 'absolute',
         top: '50%',
         left: '0',
-        width: 'calc(100% - 360px)', // Match the carousel stage width
+        width: 'calc(100% - 480px)', // Match the carousel stage width
         padding: '0 5vw',
         display: 'flex',
         justifyContent: 'space-between',
@@ -501,26 +527,38 @@ const CollectionsPage = () => {
       </div>
 
       {/* ARCHIVE INDEX: RIGHT-SIDE MASTER CONTROL */}
+      {/* ARCHIVE DASHBOARD - MODULAR DUAL-PILL ARCHITECTURE */}
       <div style={{
         position: 'absolute',
         right: '40px',
         top: '120px',
-        bottom: '80px',
-        width: '320px',
-        backgroundColor: 'rgba(255, 255, 255, 0.4)',
-        backdropFilter: 'blur(40px) saturate(160%)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
+        bottom: '240px', // Lifted to make room for the second pill
+        width: '400px', // Explicit width for consistency
+        backgroundColor: 'rgba(255, 255, 255, 0.82)',
+        backdropFilter: 'blur(60px) saturate(200%)',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
         borderRadius: '32px',
-        boxShadow: '0 40px 100px rgba(0,0,0,0.08), inset 0 0 40px rgba(255,255,255,0.2)',
+        boxShadow: '0 40px 120px rgba(0,0,0,0.1), inset 0 0 60px rgba(255,255,255,0.4)',
         display: 'flex',
         flexDirection: 'column',
         zIndex: 200,
         overflow: 'hidden'
       }}>
-        {/* Index Body: 0.75 portion (Design Sequence) */}
-        <div style={{ height: '75%', display: 'flex', flexDirection: 'column', padding: '32px 32px 16px' }}>
-          <div style={{ fontSize: '0.65rem', fontWeight: 900, color: '#888', letterSpacing: '3px', marginBottom: '20px' }}>DESIGN_ARCHIVE</div>
-          <div style={{ flex: 1, overflowY: 'auto', pr: '10px' }} className="custom-scrollbar">
+        {/* Index Body (Design Sequence) */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '32px' }}>
+          <div style={{ 
+            fontSize: '0.65rem', 
+            fontWeight: 950, 
+            color: '#888', 
+            letterSpacing: '5px', 
+            marginBottom: '24px',
+            opacity: 0.6
+          }}>DESIGN</div>
+          <div 
+            style={{ flex: 1, overflowY: 'auto', pr: '10px', position: 'relative' }} 
+            className="custom-scrollbar"
+            data-lenis-prevent
+          >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {filteredDesigns.map((d, idx) => (
                 <button
@@ -530,55 +568,130 @@ const CollectionsPage = () => {
                     background: 'none',
                     textAlign: 'left',
                     cursor: 'pointer',
-                    padding: '16px',
-                    borderRadius: '16px',
-                    backgroundColor: activeIndex === idx ? 'rgba(0,0,0,0.03)' : 'transparent',
-                    border: activeIndex === idx ? '1px solid rgba(0,0,0,0.05)' : '1px solid transparent',
-                    transition: 'all 0.3s',
+                    padding: '0',
+                    borderRadius: '20px',
+                    backgroundColor: activeIndex === idx ? '#ffffff' : 'rgba(255, 255, 255, 0.35)',
+                    backdropFilter: activeIndex === idx ? 'blur(12px)' : 'none',
+                    border: activeIndex === idx ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(0,0,0,0.02)',
+                    boxShadow: activeIndex === idx ? '0 15px 45px rgba(0,0,0,0.08)' : 'none',
+                    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                     display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px'
+                    alignItems: 'stretch',
+                    justifyContent: 'flex-start',
+                    gap: '0',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    minHeight: '110px'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', opacity: 0.5 }}>ARC-{idx+1}</span>
-                    {activeIndex === idx && <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'var(--brand)' }} />}
-                  </div>
-                  <div style={{
-                    fontSize: '0.9rem',
-                    fontWeight: 700,
-                    color: activeIndex === idx ? '#000' : '#666',
-                    fontFamily: activeIndex === idx ? '"Playfair Display", serif' : 'inherit'
+                  <div style={{ 
+                    width: '100px', 
+                    height: '110px', 
+                    backgroundColor: activeIndex === idx ? '#f8f8f8' : 'rgba(0,0,0,0.02)',
+                    overflow: 'hidden',
+                    flexShrink: 0,
+                    borderRight: '1px solid rgba(0,0,0,0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0', 
+                    borderRadius: '20px'
                   }}>
-                    {d.name}
+                    <img 
+                      src={d.image} 
+                      alt="" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover',
+                        opacity: activeIndex === idx ? 1 : 0.6,
+                        filter: activeIndex === idx ? 'none' : 'grayscale(0.2)',
+                        transition: 'all 0.4s ease',
+                        borderRadius: '20px'
+                      }} 
+                    />
+                  </div>
+
+                  {/* Content Area (Right) */}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '16px 24px', gap: '4px' }}>
+                    {/* Dynamic Indicator */}
+                    {activeIndex === idx && (
+                      <motion.div 
+                        layoutId="archive-selection"
+                        style={{
+                          position: 'absolute',
+                          left: '100px',
+                          top: '15%',
+                          bottom: '15%',
+                          width: '3px',
+                          backgroundColor: 'var(--accent)',
+                          borderRadius: '0 4px 4px 0'
+                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+
+                    <span style={{ 
+                      fontSize: '0.65rem', 
+                      fontFamily: "'Outfit', sans-serif", 
+                      fontWeight: 900,
+                      letterSpacing: '3px',
+                      color: activeIndex === idx ? 'var(--accent)' : '#888',
+                      opacity: activeIndex === idx ? 1 : 0.6
+                    }}>
+                      ARC-{String(idx + 1).padStart(3, '0')}
+                    </span>
+                    <div style={{
+                      fontSize: '1rem',
+                      fontWeight: 700,
+                      color: activeIndex === idx ? '#000' : '#444',
+                      letterSpacing: '-0.02em',
+                      lineHeight: 1.2
+                    }}>
+                      {d.name}
+                    </div>
                   </div>
                 </button>
               ))}
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div style={{ height: '1px', background: 'rgba(0,0,0,0.05)', margin: '0 32px' }} />
-
-        {/* Index Footer: 0.25 portion (Selectors) */}
-        <div style={{ height: '25%', padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'center' }}>
-          <PillDropdown 
-            label="Sector" 
-            value={SECTORS.find(s => s.id === selectedSector)?.name} 
-            options={SECTORS} 
-            onChange={(val) => {
-              setSelectedSector(val);
-              setSelectedCategory('All');
-            }}
-          />
-          <PillDropdown 
-            label="Category" 
-            value={selectedCategory} 
-            options={SUBDIVISIONS[selectedSector]} 
-            onChange={setSelectedCategory}
-          />
-        </div>
+      {/* CONTROL PILL - SELECTORS */}
+      <div style={{
+        position: 'absolute',
+        right: '40px',
+        bottom: '60px',
+        width: '400px',
+        backgroundColor: 'rgba(255, 255, 255, 0.82)',
+        backdropFilter: 'blur(60px) saturate(200%)',
+        border: '1px solid rgba(255, 255, 255, 0.6)',
+        borderRadius: '32px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.08), inset 0 0 40px rgba(255,255,255,0.4)',
+        padding: '24px 32px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        zIndex: 205, // Slightly higher to ensure selector dropdowns overlap correctly
+      }}>
+        <PillDropdown 
+          label="Sector" 
+          value={SECTORS.find(s => s.id === selectedSector)?.name} 
+          options={SECTORS} 
+          onChange={(val) => {
+            setSelectedSector(val);
+            setSelectedCategory('All');
+          }}
+        />
+        <PillDropdown 
+          label="Category" 
+          value={selectedCategory} 
+          options={SUBDIVISIONS[selectedSector]} 
+          onChange={setSelectedCategory}
+        />
       </div>
 
 
@@ -592,7 +705,7 @@ const CollectionsPage = () => {
         pointerEvents: 'none'
       }} />
 
-    </div>
+    </motion.div>
   );
 };
 

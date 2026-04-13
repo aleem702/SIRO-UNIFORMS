@@ -53,8 +53,9 @@ function ParallaxExhibitCard({ industry, index }) {
           overflow: 'hidden',
           borderRadius: '48px',
           isolation: 'isolate',
-          WebkitBackdropFilter: 'blur(20px)',
-          WebkitMaskImage: '-webkit-radial-gradient(white, black)'
+          WebkitBackdropFilter: 'blur(12px)',
+          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          willChange: 'transform'
         }}
       >
         <div className="blueprint-pattern" />
@@ -109,19 +110,12 @@ export default function LandingPage() {
 
   const { scrollY } = useScroll();
   
-  // Spring-smoothed scroll for buttery stability and to prevent refresh-jitters
-  const smoothScrollY = useSpring(scrollY, { 
-    stiffness: 100, 
-    damping: 30, 
-    restDelta: 0.001 
-  });
-  
   // Hero Pinning: Video stays clear for the first 50px of scroll to prevent snapping on refresh
-  const heroOpacity = useTransform(smoothScrollY, [50, 450], [1, 0.4]);
+  const heroOpacity = useTransform(scrollY, [50, 450], [1, 0.4]);
   
   // Museum Reveal Content Props - Sync'd to the smoothed clock for solid transitions
-  const shelfOpacity = useTransform(smoothScrollY, [20, 250], [0, 1]);
-  const shelfShadow = useTransform(smoothScrollY, [200, 500], ["0px 0px 0px rgba(0,0,0,0)", "0px -30px 60px rgba(0,0,0,0.15)"]);
+  const shelfOpacity = useTransform(scrollY, [20, 250], [0, 1]);
+  const shelfShadow = useTransform(scrollY, [200, 500], ["0px 0px 0px rgba(0,0,0,0)", "0px -30px 60px rgba(0,0,0,0.15)"]);
 
   return (
     <div className="view-transition" style={{ backgroundColor: 'var(--brand)' }}>
@@ -153,7 +147,7 @@ export default function LandingPage() {
           <motion.div 
             className="hero-video-overlay"
             style={{ 
-              opacity: useTransform(smoothScrollY, [0, 500], [0.4, 0.9])
+              opacity: useTransform(scrollY, [0, 500], [0.4, 0.9])
             }}
           />
         </div>
@@ -270,7 +264,7 @@ export default function LandingPage() {
                   background: 'rgba(255,255,255,0.03)', 
                   color: '#fff', 
                   border: '1px solid rgba(255,255,255,0.15)', 
-                  backdropFilter: 'blur(15px)', 
+                  backdropFilter: 'blur(12px)', 
                   borderRadius: '100px',
                   fontFamily: 'JetBrains Mono, monospace',
                   fontSize: '0.75rem',
