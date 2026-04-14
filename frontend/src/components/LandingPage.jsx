@@ -299,7 +299,8 @@ export default function LandingPage() {
           style={{ 
             padding: 'clamp(80px, 10vw, 120px) 0 100px',
             position: 'relative',
-            background: 'transparent'
+            background: 'transparent',
+            overflow: 'hidden'
           }}
         >
         <motion.div style={{ opacity: shelfOpacity }}>
@@ -397,7 +398,8 @@ export default function LandingPage() {
         style={{ 
           background: 'var(--surface)',
           paddingTop: '80px',
-          paddingBottom: '100px'
+          paddingBottom: '100px',
+          overflow: 'hidden'
         }}
       >
         <div className="container">
@@ -417,7 +419,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="about" className="section" style={{background: 'var(--surface)', color: 'var(--text-main)', padding: '80px 0 100px'}}>
+      <section id="about" className="section" style={{background: 'var(--surface)', color: 'var(--text-main)', padding: '80px 0 100px', overflow: 'hidden'}}>
         <div className="container about-grid" style={{display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'clamp(2rem, 8vw, 100px)', alignItems: 'center'}}>
           <div>
             <span style={{ color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', display: 'block', marginBottom: '16px' }}>Quality Since inception</span>
@@ -447,7 +449,7 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-          <div className="about-image-col" style={{position: 'relative'}}>
+          <div className="about-image-col" style={{position: 'relative', overflow: 'hidden'}}>
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}

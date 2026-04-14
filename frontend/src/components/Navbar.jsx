@@ -8,7 +8,8 @@ export default function Navbar({ pathname }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const threshold = isLanding ? window.innerHeight - 75 : 50;
+      setIsScrolled(window.scrollY > threshold);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -38,7 +39,7 @@ export default function Navbar({ pathname }) {
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         style={{
-          position: isLanding && !isScrolled ? 'absolute' : 'fixed',
+          position: 'fixed',
           width: '100%',
           left: 0,
           top: 0,

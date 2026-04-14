@@ -50,10 +50,10 @@
 }
 
 /* ── Technical Utilities ── */
-.custom-scrollbar::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none; /* Hide scrollbar globally for immersive cinematic aesthetic */
 }
-.custom-scrollbar {
+html, body, .custom-scrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -146,9 +146,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
   }
   .hero { padding-top: clamp(80px, 15vh, 120px) !important; min-height: 80vh !important; }
-  /* Center hero content on mobile */
-  .hero-content { text-align: center; }
-  .hero-content h1 { text-align: center; font-size: 3rem !important; }
+  /* Hero content left-aligned everywhere as per requirements */
   /* About section: go single column, hide image on mobile */
   .about-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .about-image-col { display: block !important; margin-top: 24px; }
@@ -165,7 +163,7 @@
 
 /* ── Reset ── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { overflow-x: clip; width: 100%; }
+html, body { width: 100%; }
 
 /* Lenis Recommended CSS */
 html.lenis, html.lenis body {
@@ -264,7 +262,7 @@ nav {
   margin-bottom: 0 !important;
   height: 100vh;
   height: 100dvh;
-  min-height: 600px;
+  min-height: 100vh !important;
   display: flex !important;
   flex-direction: column;
   justify-content: center;
@@ -715,6 +713,7 @@ footer {
   margin-top: -48px;
   position: relative;
   z-index: 1;
+  overflow-x: hidden;
 }
 
 /* Only overlap when following a curved shelf */
