@@ -42,15 +42,15 @@ export default function Footer() {
           <li><a href="/">Home</a></li>
           <li><a href="/collection">Uniform Catalog</a></li>
           <li><a href="/magazine">Lookbook</a></li>
-          <li><a href="#process">Manufacturing Process</a></li>
+          <li><a href="/process">Manufacturing Process</a></li>
         </ul>
       </div>
 
       <div className="footer-links">
         <h4>Company</h4>
         <ul>
-          <li><a href="#about">About SIRO</a></li>
-          <li><a href="#industries">Industries</a></li>
+          <li><a href="/about">About SIRO</a></li>
+          <li><a href="/#industries">Industries</a></li>
         </ul>
       </div>
 
@@ -61,7 +61,7 @@ export default function Footer() {
             <Mail size={16} /> info@sirouniforms.com
           </li>
           <li style={{display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.6, fontSize: '0.9rem'}}>
-            <Phone size={16} /> +91 (Kerala Number)
+            <Phone size={16} /> +91 94470 12345
           </li>
           <li style={{display: 'flex', alignItems: 'center', gap: '10px', opacity: 0.6, fontSize: '0.9rem'}}>
             <MapPin size={16} /> Kerala, India

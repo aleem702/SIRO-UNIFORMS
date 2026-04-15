@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import ContactPage from '../components/ContactPage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout 
+	title="Initiate Consultation" 
+	description="Ready to define your organization's signature look? Connect with SIRO's design consultants for a bespoke uniform program assessment."
+>
+	<Navbar client:load pathname={pathname} />
+	<main>
+		<ContactPage client:idle />
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+        min-height: 100vh;
+	}
+</style>

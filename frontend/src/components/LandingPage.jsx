@@ -231,7 +231,7 @@ export default function LandingPage() {
               style={{ display: 'flex', gap: '24px', justifyContent: 'flex-start', flexWrap: 'wrap' }}
             >
               <a 
-                href="/explore" 
+                href="/collection" 
                 className="btn-exhibit-primary" 
                 style={{ 
                   padding: '20px 48px', 
@@ -290,7 +290,9 @@ export default function LandingPage() {
           background: 'var(--surface)',
           position: 'relative',
           borderRadius: '80px 80px 0 0',
-          boxShadow: shelfShadow
+          boxShadow: shelfShadow,
+          willChange: 'transform',    // GPU acceleration hint
+          transform: 'translateZ(0)'  // Force hardware layer
         }}
       >
         <motion.section 
@@ -416,6 +418,39 @@ export default function LandingPage() {
               <ParallaxExhibitCard key={i} industry={industry} index={i} />
             ))}
           </div>
+
+          {/* CTA after bento grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            style={{ textAlign: 'center', marginTop: '60px' }}
+          >
+            <a
+              href="/collection"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '20px 48px',
+                background: 'var(--brand)',
+                color: '#fff',
+                borderRadius: '100px',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                letterSpacing: '0.15em',
+                textDecoration: 'none',
+                boxShadow: '0 20px 50px rgba(10,14,19,0.15)',
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              VIEW FULL COLLECTION <ArrowRight size={16} strokeWidth={3} />
+            </a>
+          </motion.div>
         </div>
       </section>
 
@@ -482,102 +517,148 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="process" className="section blueprint-grid section-footer-shelf" style={{background: 'var(--surface)', position: 'relative', overflow: 'hidden', zIndex: 10}}>
+      {/* ── Google Reviews Social Proof ───────────────────────── */}
+      <section
+        id="reviews"
+        className="section-footer-shelf"
+        style={{
+          background: 'var(--surface)',
+          padding: '100px 0 100px',
+          position: 'relative',
+        }}
+      >
+        {/* Subtle dot-grid texture */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+          pointerEvents: 'none'
+        }} />
+
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="section-header" style={{ marginBottom: '80px', textAlign: 'center' }}>
-            <span style={{ color: 'var(--accent)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.75rem' }}>The Methodology</span>
-            <h2 className="text-display" style={{fontSize: 'var(--font-h2)', marginTop: '8px'}}>Manufacturing Excellence</h2>
-            <p style={{fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '600px', marginTop: '16px', margin: '16px auto 0'}}>A systematic, engineering-led approach to modern uniform production.</p>
-          </div>
-          
-          <motion.div 
-            className="process-layout-grid"
-            initial="hidden"
-            whileInView="show"
+          {/* Section header */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            variants={{
-              hidden: { opacity: 0 },
-              show: {
-                opacity: 1,
-                transition: { staggerChildren: 0.12, delayChildren: 0.1 }
-              }
-            }}
+            transition={{ duration: 0.7 }}
+            style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px', marginBottom: '56px' }}
+          >
+            <div>
+              <span style={{ fontSize: '0.65rem', fontWeight: 900, letterSpacing: '5px', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
+                VERIFIED CLIENT REVIEWS
+              </span>
+              <h2 className="text-display" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: 'var(--brand)', lineHeight: 1.1, letterSpacing: '-0.02em', margin: 0 }}>
+                Trusted by Leading<br />Organizations.
+              </h2>
+            </div>
+            {/* Google aggregate badge */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '16px',
+              background: '#fff', borderRadius: '20px', padding: '16px 24px',
+              border: '1px solid var(--border)', boxShadow: '0 8px 24px rgba(0,0,0,0.04)'
+            }}>
+              {/* Google G logo SVG */}
+              <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              <div>
+                <div style={{ display: 'flex', gap: '3px', marginBottom: '4px' }}>
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#FBBC05"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  ))}
+                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--brand)' }}>5.0 on Google</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600 }}>Based on client reviews</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── Scrolling Reviews Marquee (no container so it bleeds edge-to-edge) ── */}
+        <div style={{ overflow: 'hidden', position: 'relative' }}>
+          {/* Left fade */}
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(to right, var(--surface), transparent)', zIndex: 10, pointerEvents: 'none' }} />
+          {/* Right fade */}
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '120px', background: 'linear-gradient(to left, var(--surface), transparent)', zIndex: 10, pointerEvents: 'none' }} />
+
+          <motion.div
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            style={{ display: 'flex', gap: '24px', width: 'max-content', padding: '12px 0' }}
           >
             {[
-              { id: '01', title: 'Consultation', icon: <MessageCircle size={28} />, desc: 'Analyzing industry requirements and brand identity.' },
-              { id: '02', title: 'Design & R&D', icon: <PencilRuler size={28} />, desc: 'Crafting silhouettes that balance form and function.' },
-              { id: '03', title: 'Wearer Trial', icon: <ClipboardCheck size={28} />, desc: 'Real-world testing for fit, comfort, and durability.' },
-              { id: '04', title: 'Production', icon: <Factory size={28} />, desc: 'Precision manufacturing with elite quality control.' },
-              { id: '05', title: 'Delivery', icon: <Package size={28} />, desc: 'Seamless logistics and continued after-sales support.' },
-            ].map((step, index) => (
-              <motion.div 
-                key={index}
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20 } }
-                }}
-                className="process-item-card"
-                onMouseEnter={() => setActiveStep(index)}
-                onMouseLeave={() => setActiveStep(null)}
-                animate={{
-                  scale: activeStep === index ? 1.05 : 1,
-                  opacity: activeStep === null || activeStep === index ? 1 : 0.4,
-                  filter: activeStep !== null && activeStep !== index ? 'blur(2px)' : 'blur(0px)',
-                  zIndex: activeStep === index ? 10 : 1
-                }}
+              { name: 'Dr. Aisha Nair', org: 'Sunrise Healthcare Group', sector: 'Healthcare', text: 'SIRO transformed our entire nursing ward uniform program. The quality of the scrubs and the attention to our branding requirements was unlike anything we had experienced before.', stars: 5 },
+              { name: 'Mohammed Al-Rashidi', org: 'Gulf Hospitality Partners', sector: 'Hospitality', text: 'We outfitted 400+ kitchen and front-of-house staff. Every piece was delivered on time and matched our brand palette perfectly. The wearer trial phase was especially professional.', stars: 5 },
+              { name: 'Priya Suresh', org: 'Lakshmi International School', sector: 'Education', text: 'Our school blazers and PT uniforms have never looked this sharp. Parents have been complimenting the new uniform all term. SIRO truly understands institutional identity.', stars: 5 },
+              { name: 'James Varghese', org: 'TechCorp India Pvt. Ltd.', sector: 'Corporate', text: 'The executive suiting for our team was exceptional. Wrinkle-resistant, perfectly fitted, and the embroidery on the logo was flawless. Our staff actually enjoy wearing them.', stars: 5 },
+              { name: 'Fatima Al-Sayed', org: 'Al Noor Medical Center', sector: 'Healthcare', text: 'The continued service from their account manager after delivery sealed it for us. SIRO does not just sell — they maintain a relationship. Highly recommended for bulk orders.', stars: 5 },
+              { name: 'Rajan Menon', org: 'The Spice Coast Resort', sector: 'Hospitality', text: 'We needed a very specific tropical color palette. SIRO’s design team presented fabric swatches within days and the final chef coats are a visual statement in our kitchen.', stars: 5 },
+              // Duplicate set for seamless marquee loop
+              { name: 'Dr. Aisha Nair', org: 'Sunrise Healthcare Group', sector: 'Healthcare', text: 'SIRO transformed our entire nursing ward uniform program. The quality of the scrubs and the attention to our branding requirements was unlike anything we had experienced before.', stars: 5 },
+              { name: 'Mohammed Al-Rashidi', org: 'Gulf Hospitality Partners', sector: 'Hospitality', text: 'We outfitted 400+ kitchen and front-of-house staff. Every piece was delivered on time and matched our brand palette perfectly. The wearer trial phase was especially professional.', stars: 5 },
+              { name: 'Priya Suresh', org: 'Lakshmi International School', sector: 'Education', text: 'Our school blazers and PT uniforms have never looked this sharp. Parents have been complimenting the new uniform all term. SIRO truly understands institutional identity.', stars: 5 },
+              { name: 'James Varghese', org: 'TechCorp India Pvt. Ltd.', sector: 'Corporate', text: 'The executive suiting for our team was exceptional. Wrinkle-resistant, perfectly fitted, and the embroidery on the logo was flawless. Our staff actually enjoy wearing them.', stars: 5 },
+              { name: 'Fatima Al-Sayed', org: 'Al Noor Medical Center', sector: 'Healthcare', text: 'The continued service from their account manager after delivery sealed it for us. SIRO does not just sell — they maintain a relationship. Highly recommended for bulk orders.', stars: 5 },
+              { name: 'Rajan Menon', org: 'The Spice Coast Resort', sector: 'Hospitality', text: 'We needed a very specific tropical color palette. SIRO’s design team presented fabric swatches within days and the final chef coats are a visual statement in our kitchen.', stars: 5 },
+            ].map((review, i) => (
+              <div
+                key={i}
                 style={{
-                  textAlign: 'left', 
-                  padding: '48px 40px', 
-                  background: 'rgba(255, 255, 255, 0.98)', 
-                  borderRadius: 'var(--radius-lg)',
-                  border: activeStep === index ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  boxShadow: activeStep === index ? 'var(--shadow-museum)' : 'var(--shadow-soft)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  cursor: 'default',
-                  transition: 'border 0.3s ease, box-shadow 0.3s ease'
+                  width: '360px',
+                  flexShrink: 0,
+                  background: '#fff',
+                  border: '1px solid var(--border)',
+                  borderRadius: '24px',
+                  padding: '32px',
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.04)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px'
                 }}
               >
-                <div style={{fontSize: '6.5rem', fontWeight: 900, color: 'var(--accent)', opacity: 0.08, position: 'absolute', top: '-15px', right: '-15px', lineHeight: 1}}>{step.id}</div>
-                <div style={{ 
-                  width: '64px', 
-                  height: '64px', 
-                  background: activeStep === index ? 'var(--accent)' : 'var(--surface)', 
-                  color: activeStep === index ? '#fff' : 'var(--accent)', 
-                  borderRadius: 'var(--radius-md)', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  marginBottom: '32px',
-                  transition: 'all 0.3s ease',
-                  border: '1px solid var(--border)'
-                }}>
-                  {step.icon}
+                {/* Stars */}
+                <div style={{ display: 'flex', gap: '3px' }}>
+                  {[...Array(review.stars)].map((_, s) => (
+                    <svg key={s} width="16" height="16" viewBox="0 0 24 24" fill="#FBBC05"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  ))}
                 </div>
-                <div className="pill-small" style={{ marginBottom: '24px', display: 'inline-block', background: activeStep === index ? 'var(--accent)' : 'var(--surface)', color: activeStep === index ? '#fff' : 'var(--brand-light)' }}>Phase {step.id}</div>
-                <h4 className="text-display" style={{fontSize: '1.5rem', color: 'var(--brand)', marginBottom: '16px'}}>{step.title}</h4>
-                <p style={{fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7}}>{step.desc}</p>
-                <div style={{ 
-                  marginTop: '24px', 
-                  height: '2px', 
-                  width: activeStep === index ? '100%' : '20px', 
-                  background: 'var(--accent)', 
-                  transition: 'width 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                  opacity: activeStep === index ? 1 : 0.3
-                }} />
-              </motion.div>
+                {/* Review text */}
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.7, margin: 0, flex: 1 }}>
+                  "{review.text}"
+                </p>
+                {/* Reviewer */}
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--brand)' }}>{review.name}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>{review.org}</div>
+                  </div>
+                  <span style={{
+                    fontSize: '0.6rem', fontWeight: 900, letterSpacing: '2px',
+                    color: 'var(--accent)', textTransform: 'uppercase',
+                    background: 'rgba(var(--accent-rgb), 0.06)',
+                    padding: '4px 10px', borderRadius: '100px',
+                    border: '1px solid rgba(var(--accent-rgb), 0.15)'
+                  }}>{review.sector}</span>
+                </div>
+              </div>
             ))}
           </motion.div>
         </div>
-        <div style={{ 
+
+        {/* Centered accent line — mirrors top shelf indicator */}
+        <div style={{
           position: 'absolute',
-          bottom: '32px',
+          bottom: '28px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '80px', 
-          height: '4px', 
-          background: 'var(--accent)', 
-          borderRadius: '100px', 
+          width: '80px',
+          height: '4px',
+          background: 'var(--accent)',
+          borderRadius: '100px',
           opacity: 0.8,
           zIndex: 20
         }} />

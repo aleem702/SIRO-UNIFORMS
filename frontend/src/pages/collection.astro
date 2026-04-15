@@ -6,10 +6,13 @@ import CollectionsPage from '../components/CollectionsPage.jsx';
 const { pathname } = Astro.url;
 ---
 
-<Layout title="Design Collection | SIRO Studio Gallery">
+<Layout 
+	title="Digital Exhibit Gallery" 
+	description="Browse the SIRO Studio high-fidelity uniform collection. Featuring interactive 360 viewer experiences for Corporate, Healthcare, and Hospitality sectors."
+>
 	<Navbar client:load pathname={pathname} />
 	<main>
-		<CollectionsPage client:load />
+		<CollectionsPage client:idle />
 	</main>
 </Layout>
 

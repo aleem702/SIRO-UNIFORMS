@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import BrochuresPage from '../components/BrochuresPage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout 
+  title="Partner Resource Library" 
+  description="Explore technical data sheets and fabric catalogs from SIRO's international network of textile partners."
+>
+  <Navbar client:load pathname={pathname} />
+  <main>
+    <BrochuresPage client:idle />
+  </main>
+</Layout>

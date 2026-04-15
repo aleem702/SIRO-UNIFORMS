@@ -179,6 +179,7 @@ export default function FlipbookCatalog() {
             onClick={() => flipBookRef.current?.pageFlip().flipPrev()}
             disabled={isFirstPage}
             className="nav-arrow prev"
+            aria-label="Previous page"
             style={{
               position: 'absolute',
               left: '40px',
@@ -203,6 +204,7 @@ export default function FlipbookCatalog() {
             onClick={() => flipBookRef.current?.pageFlip().flipNext()}
             disabled={isLastPage}
             className="nav-arrow next"
+            aria-label="Next page"
             style={{
               position: 'absolute',
               right: '40px',

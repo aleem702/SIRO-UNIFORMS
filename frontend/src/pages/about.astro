@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import AboutPage from '../components/AboutPage.jsx';
+
+const { pathname } = Astro.url;
+---
+
+<Layout 
+	title="Our Design Legacy" 
+	description="Learn about SIRO Uniforms' mission to define corporate identity through fine tailoring and innovative textile engineering."
+>
+	<Navbar client:load pathname={pathname} />
+	<main>
+		<AboutPage client:idle />
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+        min-height: 100vh;
+	}
+</style>

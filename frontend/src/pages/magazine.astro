@@ -6,10 +6,13 @@ import MagazinePage from '../components/MagazinePage.jsx';
 const { pathname } = Astro.url;
 ---
 
-<Layout title="SIRO Lookbook | Signature Collections">
+<Layout 
+	title="2025 Design Portfolio" 
+	description="Experience the SIRO 'STRIPES' portfolio. A high-fidelity digital lookbook showcasing our latest editorial uniform collections."
+>
 	<Navbar client:load pathname={pathname} />
 	<main>
-		<MagazinePage client:load />
+		<MagazinePage client:idle />
 	</main>
 </Layout>
 

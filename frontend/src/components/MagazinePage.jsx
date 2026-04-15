@@ -78,7 +78,12 @@ export default function MagazinePage() {
                 <BookOpen size={28} />
                 <h2>SIRO UNIFORMS <span>/ 2025 PORTFOLIO</span></h2>
               </div>
-              <button className="modal-close" onClick={() => setIsModalOpen(false)}>
+              <button
+                className="modal-close"
+                onClick={() => setIsModalOpen(false)}
+                aria-label="Close lookbook modal"
+                title="Close"
+              >
                 <X size={24} />
               </button>
             </div>
@@ -104,7 +109,7 @@ export default function MagazinePage() {
         <p style={{color: 'var(--text-muted)', marginBottom: '32px'}}>Check out our full collection in the catalog or contact us for a custom consultation.</p>
         <div style={{display: 'flex', gap: '16px', justifyContent: 'center'}}>
           <a href="/collection" className="btn btn-primary">Browse Catalog</a>
-          <a href="#contact" className="btn" style={{border: '1px solid var(--border)'}}>Contact Us</a>
+          <a href="/contact" className="btn" style={{border: '1px solid var(--border)'}}>Contact Us</a>
         </div>
       </div>
 

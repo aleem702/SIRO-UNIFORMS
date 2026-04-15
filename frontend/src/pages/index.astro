@@ -6,10 +6,13 @@ import LandingPage from '../components/LandingPage.jsx';
 const { pathname } = Astro.url;
 ---
 
-<Layout title="SIRO Uniforms | Professional Uniforms Redefined">
+<Layout 
+	title="Premium Uniform Manufacturing" 
+	description="SIRO Uniforms delivers professional corporate couture, specialized healthcare scrubs, and bespoke hospitality attire. Kerala's leading uniform label serving the GCC and India."
+>
 	<Navbar client:load pathname={pathname} />
 	<main>
-		<LandingPage client:load />
+		<LandingPage client:idle />
 	</main>
 </Layout>
 

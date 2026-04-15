@@ -15,24 +15,24 @@ export default function Navbar({ pathname }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const isLanding = pathname === '/';
   const isCollectionPage = pathname === '/collection';
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Collection', path: '/collection' },
+    { name: 'Brochures', path: '/brochures' },
     { name: 'Lookbook', path: '/magazine' },
-    { name: 'About', path: '/#about' },
-    { name: 'Process', path: '/#process' },
-    { name: 'Contact', path: '/#contact' },
+    { name: 'About', path: '/about' },
+    { name: 'Process', path: '/process' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
     <>
       <motion.nav
         animate={{ 
-          y: isNavbarHidden ? -75 : 0,
+          y: 0,
           backgroundColor: isScrolled || !isLanding || isMenuOpen ? 'var(--surface)' : 'rgba(255, 255, 255, 0)',
           backdropFilter: isScrolled || !isLanding || isMenuOpen ? 'blur(12px)' : 'blur(0px)',
           borderBottom: isScrolled || !isLanding || isMenuOpen ? '1px solid var(--border)' : '1px solid rgba(255,255,255,0)',
@@ -54,37 +54,6 @@ export default function Navbar({ pathname }) {
         <a href="/" className="nav-logo" onClick={() => setIsMenuOpen(false)}>
           <img src="/logo.png" alt="SIRO Uniforms" style={{ height: '48px' }} />
         </a>
-
-        {/* Center Toggle Arrow for Collection Page */}
-        {isCollectionPage && (
-          <motion.button
-            onClick={() => setIsNavbarHidden(!isNavbarHidden)}
-            whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,0,0,0.05)' }}
-            animate={{
-              bottom: isNavbarHidden ? -32 : 10,
-              rotate: isNavbarHidden ? 180 : 0
-            }}
-            style={{
-              position: 'absolute',
-              left: '50%',
-              x: '-50%',
-              background: isNavbarHidden ? 'var(--surface)' : 'transparent',
-              border: isNavbarHidden ? '1px solid var(--border)' : 'none',
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: 'var(--brand)',
-              zIndex: 1001,
-              boxShadow: isNavbarHidden ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
-            }}
-          >
-            <ChevronDown size={18} />
-          </motion.button>
-        )}
 
         {/* Desktop Links */}
         <div className="nav-links">
@@ -154,7 +123,21 @@ export default function Navbar({ pathname }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
               >
-                <a href={link.path} onClick={() => setIsMenuOpen(false)} style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--brand)', display: 'block', padding: '10px 12px', borderRadius: '12px', transition: 'background 0.2s', textDecoration: 'none' }}>
+                <a 
+                  href={link.path} 
+                  onClick={() => setIsMenuOpen(false)} 
+                  className={`mobile-nav-link ${pathname === link.path ? 'active' : ''}`}
+                  style={{ 
+                    fontSize: '0.95rem', 
+                    fontWeight: 600, 
+                    color: 'var(--brand)', 
+                    display: 'block', 
+                    padding: '10px 12px', 
+                    borderRadius: '12px', 
+                    transition: 'all 0.2s', 
+                    textDecoration: 'none' 
+                  }}
+                >
                   {link.name}
                 </a>
               </motion.div>

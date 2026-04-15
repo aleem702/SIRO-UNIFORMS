@@ -3,8 +3,10 @@
 /* ── Tokens ── */
 :root {
   --brand:       #121418;
+  --brand-rgb:   18, 20, 24;
   --brand-light: #2A2D35;
   --accent:      #B41E3A;
+  --accent-rgb:  180, 30, 58;
   --accent-soft: #FDECEC;
   --accent-muted: #7D1528;
   --surface:     #F9F8F6;
@@ -228,6 +230,13 @@ nav {
   padding: 10px 20px;
 }
 
+/* Mobile Nav Active State */
+.mobile-nav-link.active {
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+  border-left: 3px solid var(--accent);
+}
+
 /* ── Hero Section ── */
 .hero {
   min-height: 100vh;
@@ -448,6 +457,7 @@ nav {
     padding-bottom: 60px !important;
   }
 }
+
 
 /* ── Shelf Overlay ── */
 .section.section-shelf {

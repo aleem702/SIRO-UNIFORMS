@@ -3,9 +3,10 @@ import '../styles/global.css';
 
 interface Props {
 	title: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = "SIRO Uniforms - Professional Uniform Solutions. Premium uniform manufacturing based in Kerala, India, serving Education, Healthcare, and Corporate sectors." } = Astro.props;
 const { pathname } = Astro.url;
 ---
 
@@ -13,13 +14,18 @@ const { pathname } = Astro.url;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="SIRO Uniforms - Professional Uniform Solutions" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{title} | SIRO Uniforms</title>
 	</head>
 	<body>
+		<noscript>
+			<div style="padding: 20px; text-align: center; background: var(--accent); color: white;">
+				This site requires JavaScript for the full immersive experience. Please enable it in your browser.
+			</div>
+		</noscript>
 		<slot />
 		<script>
 			import Lenis from 'lenis';
