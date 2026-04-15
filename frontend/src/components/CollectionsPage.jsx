@@ -314,10 +314,9 @@ const ImageSequenceViewer = ({ basePath, frameCount, isActive }) => {
           animate={{ opacity: 1, x: 0 }}
           style={{
             position: 'absolute',
-            // Math: 460px from right screen edge is center of 40px gap. 
-            // -10% cancels the viewer's right offset, -40px bridges the stage-to-sidebar gap.
-            right: 'calc(-10% - 40px)',
-            top: 'calc(50% - 14px)',    // Visual-center correction to align with garment mass
+            // Fixed anchor inside the stage/sidebar gap for exact placement.
+            right: '-82px',
+            top: 'calc(50% - 44px)',
             transform: 'translateY(-50%)',
             display: 'flex',
             flexDirection: 'column',
