@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, BookOpen, Download, ChevronLeft, ExternalLink, FileText, ArrowRight } from 'lucide-react';
+import { X, BookOpen, Download, ChevronLeft, ExternalLink, FileText, ArrowRight, Search } from 'lucide-react';
 import Footer from './Footer';
 
 const BRANDS = [
@@ -55,6 +55,19 @@ const BRANDS = [
 export default function BrochuresPage() {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [activePdf, setActivePdf] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const filteredBrands = BRANDS.filter(brand => 
+    brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const closeModal = () => {
     setSelectedBrand(null);
@@ -62,22 +75,23 @@ export default function BrochuresPage() {
   };
 
   return (
-    <div className="viewer-page" style={{ 
+    <div className="gallery-page" style={{ 
       minHeight: '100vh', 
+      display: 'flex',
+      flexDirection: 'column',
       background: 'var(--surface)',
-      paddingTop: '120px',
-      paddingBottom: '80px',
-      overflow: 'hidden',
+      paddingTop: 'clamp(80px, 100px, 120px)',
       color: 'var(--text-main)',
-      position: 'relative'
+      position: 'relative',
+      overflowX: 'hidden'
     }}>
       {/* Background Architectural Grid Lines */}
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '100px 100px', pointerEvents: 'none', zIndex: 0 }} />
 
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="container" style={{ position: 'relative', zIndex: 1, flex: 1, paddingBottom: 'clamp(40px, 10vw, 80px)', width: '100%' }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 8vw, 60px)', width: '100%' }}>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -86,7 +100,7 @@ export default function BrochuresPage() {
               display: 'inline-block', 
               background: 'rgba(0,0,0,0.04)', 
               color: 'var(--text-muted)',
-              marginBottom: '24px',
+              marginBottom: '20px',
               border: '1px solid rgba(0,0,0,0.05)'
             }}
           >
@@ -97,7 +111,12 @@ export default function BrochuresPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-display" 
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: 'var(--brand)', marginBottom: '24px' }}
+            style={{ 
+              fontSize: 'clamp(2.2rem, 8vw, 4.5rem)', 
+              color: 'var(--brand)', 
+              marginBottom: '16px',
+              width: '100%'
+            }}
           >
             Brand Brochures
           </motion.h1>
@@ -105,10 +124,59 @@ export default function BrochuresPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}
+            style={{ 
+              color: 'var(--text-muted)', 
+              fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', 
+              maxWidth: '600px', 
+              margin: '0 auto 24px',
+              padding: '0 20px',
+              lineHeight: 1.5
+            }}
           >
             Explore the specialized uniform libraries from our trusted fabric and manufacturing counterparts worldwide.
           </motion.p>
+
+          {/* Search Bar - Marked Spot */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            style={{
+              maxWidth: '500px',
+              margin: '0 auto',
+              position: 'relative',
+              zIndex: 10
+            }}
+          >
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: '#fff',
+              border: '1px solid rgba(0,0,0,0.08)',
+              borderRadius: '100px',
+              padding: '4px 8px 4px 20px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
+              transition: 'all 0.3s ease'
+            }}>
+              <Search size={18} color="var(--text-muted)" />
+              <input 
+                type="text"
+                placeholder="Search brands or fabrics..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  padding: '12px 16px',
+                  fontSize: '0.95rem',
+                  width: '100%',
+                  outline: 'none',
+                  color: 'var(--brand)',
+                  fontWeight: 500
+                }}
+              />
+            </div>
+          </motion.div>
         </div>
 
         {/* Bento Grid */}
@@ -121,13 +189,13 @@ export default function BrochuresPage() {
           }}
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '24px',
+            gridTemplateColumns: `repeat(auto-fill, minmax(${isMobile ? '145px' : '260px'}, 1fr))`,
+            gap: 'clamp(12px, 3vw, 32px)',
             maxWidth: '1200px',
             margin: '0 auto'
           }}
         >
-          {BRANDS.map((brand, i) => (
+          {filteredBrands.map((brand, i) => (
             <motion.button
               key={brand.id}
               variants={{
@@ -140,7 +208,7 @@ export default function BrochuresPage() {
               style={{
                 background: 'transparent',
                 border: 'none',
-                padding: '20px',
+                padding: 'clamp(12px, 2vw, 20px)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -157,7 +225,7 @@ export default function BrochuresPage() {
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                padding: '24px'
+                padding: 'clamp(12px, 4vw, 24px)'
               }}>
                 <img 
                   src={brand.logo} 
@@ -475,7 +543,7 @@ export default function BrochuresPage() {
       </AnimatePresence>
 
       {/* ── Final Conversion Block ── */}
-      <section style={{ padding: '100px 0', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 1 }}>
+      <section style={{ padding: 'clamp(60px, 12vw, 100px) 0', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 1 }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <div style={{ width: '48px', height: '3px', background: 'var(--accent)', borderRadius: '100px', margin: '0 auto 40px' }} />
           

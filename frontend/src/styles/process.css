@@ -1,8 +1,7 @@
 .process-page {
-  background-color: var(--surface-2);
+  background-color: var(--surface);
   min-height: 100vh;
   padding-top: clamp(100px, 15vh, 160px);
-  padding-bottom: 120px;
   position: relative;
   color: var(--text-main);
   overflow: hidden;
@@ -78,9 +77,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15vh;
+  margin-bottom: clamp(60px, 12vh, 120px);
   position: relative;
   z-index: 3;
+}
+
+.roadmap-node:last-child {
+  margin-bottom: 4vh;
 }
 
 /* Odd nodes push content to the left */

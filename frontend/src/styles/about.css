@@ -12,7 +12,7 @@
   align-items: center;
   padding-top: clamp(80px, 15vh, 120px);
   overflow: hidden;
-  background: #fff;
+  background: var(--surface);
 }
 
 .hero-container {
@@ -54,8 +54,8 @@
 
 /* Profile */
 .profile-section {
-  padding: 80px 0 120px;
-  background: #fff;
+  padding: clamp(40px, 8vw, 80px) 0 clamp(60px, 12vw, 120px);
+  background: var(--surface);
   position: relative;
   z-index: 2;
 }
@@ -63,7 +63,7 @@
 .profile-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 80px;
+  gap: clamp(32px, 8vw, 80px);
   align-items: center;
 }
 

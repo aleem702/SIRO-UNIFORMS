@@ -341,6 +341,9 @@ nav {
     height: 100dvh; /* Force exact viewport fill on mobile */
     min-height: -webkit-fill-available;
   }
+  .hero-video-element {
+    object-position: 75% center; /* Focus on the subject (white box area) */
+  }
 }
 
 /* ── Buttons ── */

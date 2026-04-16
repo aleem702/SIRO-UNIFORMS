@@ -94,113 +94,115 @@ export default function ProcessPage() {
   ];
 
   return (
-    <div className="process-page">
-      <div className="container" style={{ position: 'relative', zIndex: 10 }}>
-        <motion.div 
-          className="process-header"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="design-code-badge" style={{ marginBottom: '16px' }}>THE SIRO METHOD</span>
-          <h1>Our Service Workflow</h1>
-          <p className="lead-text" style={{ margin: '0 auto' }}>
-            A structured, precision-driven architectural roadmap to outfitting your organization.
-          </p>
-        </motion.div>
-
-        <div className="roadmap-container" ref={containerRef}>
-          {/* Static dashed track */}
-          <div className="roadmap-track" />
-          
-          {/* Animated red solid line drawing down */}
+    <>
+      <div className="process-page">
+        <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           <motion.div 
-            className="roadmap-line" 
-            style={{ scaleY }}
-          />
+            className="process-header"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="design-code-badge" style={{ marginBottom: '16px' }}>THE SIRO METHOD</span>
+            <h1>Our Service Workflow</h1>
+            <p className="lead-text" style={{ margin: '0 auto' }}>
+              A structured, precision-driven architectural roadmap to outfitting your organization.
+            </p>
+          </motion.div>
 
-          {/* Render steps */}
-          <div className="roadmap-nodes">
-            {steps.map((step, idx) => (
-              <ProcessNode 
-                key={idx} 
-                step={step} 
-                index={idx} 
-                scrollYProgress={smoothProgress} 
-              />
-            ))}
+          <div className="roadmap-container" ref={containerRef}>
+            {/* Static dashed track */}
+            <div className="roadmap-track" />
+            
+            {/* Animated red solid line drawing down */}
+            <motion.div 
+              className="roadmap-line" 
+              style={{ scaleY }}
+            />
+
+            {/* Render steps */}
+            <div className="roadmap-nodes">
+              {steps.map((step, idx) => (
+                <ProcessNode 
+                  key={idx} 
+                  step={step} 
+                  index={idx} 
+                  scrollYProgress={smoothProgress} 
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ── End CTA ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.8 }}
-        style={{
-          textAlign: 'center',
-          padding: '100px 24px 120px',
-          position: 'relative',
-          zIndex: 10
-        }}
-      >
-        {/* Thin accent line above */}
-        <div style={{ width: '48px', height: '3px', background: 'var(--accent)', borderRadius: '100px', margin: '0 auto 48px' }} />
-
-        <span style={{
-          fontSize: '0.65rem', fontWeight: 900, letterSpacing: '5px',
-          color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '20px'
-        }}>START YOUR PROGRAM</span>
-
-        <h2 style={{
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-          fontWeight: 900,
-          color: 'var(--brand)',
-          lineHeight: 1.1,
-          letterSpacing: '-0.02em',
-          marginBottom: '20px'
-        }}>
-          Ready to outfit<br />your organization?
-        </h2>
-
-        <p style={{
-          fontSize: '1.1rem',
-          color: 'var(--text-muted)',
-          maxWidth: '480px',
-          margin: '0 auto 48px',
-          lineHeight: 1.6
-        }}>
-          Let’s begin with a consultation. No commitments — just a conversation about what your team needs.
-        </p>
-
-        <a
-          href="/contact"
+        {/* ── End CTA ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.8 }}
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '20px 48px',
-            background: 'var(--brand)',
-            color: '#fff',
-            borderRadius: '100px',
-            fontFamily: 'JetBrains Mono, monospace',
-            fontWeight: 700,
-            fontSize: '0.75rem',
-            letterSpacing: '0.15em',
-            textDecoration: 'none',
-            boxShadow: '0 20px 50px rgba(10,14,19,0.15)',
-            transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+            textAlign: 'center',
+            padding: '40px 24px 120px',
+            position: 'relative',
+            zIndex: 10
           }}
-          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-          onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
         >
-          GET IN TOUCH <ArrowRight size={16} strokeWidth={3} />
-        </a>
-      </motion.div>
+          {/* Thin accent line above */}
+          <div style={{ width: '48px', height: '3px', background: 'var(--accent)', borderRadius: '100px', margin: '0 auto 48px' }} />
 
+          <span style={{
+            fontSize: '0.65rem', fontWeight: 900, letterSpacing: '5px',
+            color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '20px'
+          }}>START YOUR PROGRAM</span>
+
+          <h2 style={{
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: 900,
+            color: 'var(--brand)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            marginBottom: '20px'
+          }}>
+            Ready to outfit<br />your organization?
+          </h2>
+
+          <p style={{
+            fontSize: '1.1rem',
+            color: 'var(--text-muted)',
+            maxWidth: '480px',
+            margin: '0 auto 48px',
+            lineHeight: 1.6
+          }}>
+            Let’s begin with a consultation. No commitments — just a conversation about what your team needs.
+          </p>
+
+          <a
+            href="/contact"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '20px 48px',
+              background: 'var(--brand)',
+              color: '#fff',
+              borderRadius: '100px',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              letterSpacing: '0.15em',
+              textDecoration: 'none',
+              boxShadow: '0 20px 50px rgba(10,14,19,0.15)',
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            GET IN TOUCH <ArrowRight size={16} strokeWidth={3} />
+          </a>
+        </motion.div>
+      </div>
       <Footer />
-    </div>
+    </>
+
   );
 }

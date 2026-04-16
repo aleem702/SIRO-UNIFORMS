@@ -177,13 +177,14 @@ export default function LandingPage() {
             <motion.h1 
               className="text-display" 
               style={{ 
-                fontSize: 'clamp(3rem, 8vw, 7rem)', 
+                fontSize: 'clamp(3.2rem, 12vw, 7rem)', 
                 color: '#fff', 
-                lineHeight: 0.85, 
-                marginBottom: '40px',
+                lineHeight: 'clamp(0.9, 5vw, 0.85)', 
+                marginBottom: 'clamp(16px, 4vw, 40px)',
                 letterSpacing: '-0.05em',
                 fontWeight: 900,
-                textTransform: 'none'
+                textTransform: 'none',
+                textShadow: '0 4px 30px rgba(0,0,0,0.3)'
               }}
             >
               Professional Uniforms <br /> 
@@ -196,30 +197,29 @@ export default function LandingPage() {
               transition={{ delay: 1.2, duration: 0.8 }}
               style={{ 
                 borderTop: '1px solid rgba(255,255,255,0.2)',
-                paddingTop: '24px',
-                marginBottom: '40px',
-                maxWidth: '500px'
+                paddingTop: 'clamp(12px, 3vw, 24px)',
+                marginBottom: 'clamp(24px, 5vw, 40px)',
+                maxWidth: '600px'
               }}
             >
               <p style={{ 
-                fontFamily: 'serif', 
-                fontSize: '1.4rem', 
-                color: '#fff', 
+                fontSize: 'clamp(1rem, 2vw, 1.4rem)', 
                 fontStyle: 'italic', 
+                color: 'rgba(255,255,255,0.9)',
                 lineHeight: 1.4,
-                marginBottom: '12px'
+                marginBottom: '8px',
+                textShadow: '0 2px 10px rgba(0,0,0,0.2)'
               }}>
-                "Corporate Couture – Stitched to Perfection"
+                "Corporate Couture — Stitched to Perfection"
               </p>
               <p style={{ 
-                fontFamily: 'JetBrains Mono, monospace', 
-                fontSize: '0.65rem', 
-                fontWeight: 700, 
+                fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)', 
+                fontWeight: 900, 
+                color: 'rgba(255,255,255,0.5)', 
                 textTransform: 'uppercase', 
-                letterSpacing: '0.2em', 
-                color: 'rgba(255,255,255,0.5)' 
+                letterSpacing: '0.2em' 
               }}>
-                — The SIRO Founding Principle
+                — The Siro Founding Principle
               </p>
             </motion.div>
 
@@ -299,7 +299,7 @@ export default function LandingPage() {
           className="section section-shelf" 
           id="identity" 
           style={{ 
-            padding: 'clamp(80px, 10vw, 120px) 0 100px',
+            padding: 'clamp(60px, 10vw, 120px) 0 clamp(16px, 4vw, 80px)',
             position: 'relative',
             background: 'transparent',
             overflow: 'hidden'
@@ -366,7 +366,7 @@ export default function LandingPage() {
 
           {/* 02: Strategic Intent (Manifesto Style) */}
           <div style={{ paddingTop: '20px' }}>
-             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '80px' }}>
+             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'clamp(40px, 8vw, 80px)' }}>
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -399,13 +399,13 @@ export default function LandingPage() {
         id="industries" 
         style={{ 
           background: 'var(--surface)',
-          paddingTop: '80px',
-          paddingBottom: '100px',
+          paddingTop: 'clamp(16px, 4vw, 60px)',
+          paddingBottom: 'clamp(24px, 5vw, 80px)',
           overflow: 'hidden'
         }}
       >
         <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: 'clamp(24px, 6vw, 64px)' }}>
             <h2 className="text-display" style={{fontSize: 'var(--font-h2)', marginTop: '8px'}}>Industries We Serve</h2>
           </div>
           <div className="bento-grid">
@@ -425,7 +425,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            style={{ textAlign: 'center', marginTop: '60px' }}
+            style={{ textAlign: 'center', marginTop: 'clamp(24px, 6vw, 60px)' }}
           >
             <a
               href="/collection"
@@ -454,8 +454,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="about" className="section" style={{background: 'var(--surface)', color: 'var(--text-main)', padding: '80px 0 100px', overflow: 'hidden'}}>
-        <div className="container about-grid" style={{display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'clamp(2rem, 8vw, 100px)', alignItems: 'center'}}>
+      <section id="about" className="section" style={{background: 'var(--surface)', color: 'var(--text-main)', padding: 'clamp(32px, 8vw, 80px) 0 clamp(40px, 10vw, 100px)', overflow: 'hidden'}}>
+        <div className="container about-grid" style={{display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'clamp(1.5rem, 6vw, 100px)', alignItems: 'center'}}>
           <div>
             <span style={{ color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', display: 'block', marginBottom: '16px' }}>Quality Since inception</span>
             <h2 className="text-display" style={{fontSize: 'var(--font-h2)', color: 'var(--brand)', marginBottom: '32px'}}>Unrivaled Specialist <br />in Designer Uniforms</h2>
@@ -523,7 +523,7 @@ export default function LandingPage() {
         className="section-footer-shelf"
         style={{
           background: 'var(--surface)',
-          padding: '100px 0 100px',
+          padding: 'clamp(40px, 10vw, 100px) 0 clamp(60px, 12vw, 100px)',
           position: 'relative',
         }}
       >
